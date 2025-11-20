@@ -1,0 +1,24 @@
+[Unit]
+Description=Magic Mouse Workspace Switcher
+# Wait for the graphical interface to be ready
+After=graphical.target
+# Only run if we have a graphical environment
+Requires=graphical.target
+
+[Service]
+Type=simple
+# Run as your user (not root) so xdotool can access the display
+User=commstablished
+Group=input
+# Path to our Python script
+ExecStart=/usr/bin/python3 /usr/local/bin/magic_swipe.py
+# Restart if it crashes
+Restart=on-failure
+RestartSec=5
+# Set the DISPLAY environment variable so xdotool can work
+Environment="DISPLAY=:1"
+Environment="XAUTHORITY=/home/commstablished/.Xauthority"
+
+[Install]
+# Start this service when the graphical interface starts
+WantedBy=graphical.target
