@@ -26,9 +26,10 @@ import time
 # Workspace switching commands
 # Modify these to match your desktop environment's keyboard shortcuts
 
-# Default: Vertical workspaces (Pop!_OS, GNOME)
-WORKSPACE_SWITCH_LEFT = ["xdotool", "key", "ctrl+super+Up"]
-WORKSPACE_SWITCH_RIGHT = ["xdotool", "key", "ctrl+super+Down"]
+# Vertical workspaces (Pop!_OS, GNOME)
+# Using Super+Up/Down (no Ctrl to avoid browser zoom interference)
+WORKSPACE_SWITCH_LEFT = ["xdotool", "key", "super+Up"]
+WORKSPACE_SWITCH_RIGHT = ["xdotool", "key", "super+Down"]
 
 # Alternative configurations (uncomment to use):
 
@@ -51,7 +52,8 @@ WORKSPACE_SWITCH_RIGHT = ["xdotool", "key", "ctrl+super+Down"]
 
 # Debouncing: Minimum time (in seconds) between swipe actions
 # Set to 0 to disable debouncing
-DEBOUNCE_TIME = 0.3
+# Increased to reduce sensitivity and prevent accidental triggers
+DEBOUNCE_TIME = 0.5
 
 # Verbose output (useful for debugging)
 VERBOSE = True
@@ -141,10 +143,11 @@ class MagicMouseGestureHandler:
                 if event.type == ecodes.EV_REL:
                     # Check if it's a horizontal wheel event (swipe)
                     if event.code == ecodes.REL_HWHEEL:
-                        # event.value: negative = left swipe, positive = right swipe
-                        if event.value < 0:
+                        # Trigger on horizontal swipes
+                        # Debouncing handles preventing rapid-fire triggers
+                        if event.value < 0:  # Left swipe
                             self.execute_action(WORKSPACE_SWITCH_LEFT, "left")
-                        elif event.value > 0:
+                        elif event.value > 0:  # Right swipe
                             self.execute_action(WORKSPACE_SWITCH_RIGHT, "right")
 
         except KeyboardInterrupt:
