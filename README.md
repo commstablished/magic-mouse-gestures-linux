@@ -139,16 +139,27 @@ The gestures work automatically after installation!
 
 ## ⚙️ Configuration
 
+### Pop!_OS Users - Important!
+
+If you're on Pop!_OS, you need to change your system keyboard shortcuts to match the script:
+
+1. Open **Settings** → **Keyboard** → **Keyboard Shortcuts** → **Navigation**
+2. Find **"Move to workspace above"** → Set to: `Super+Up`
+3. Find **"Move to workspace below"** → Set to: `Super+Down`
+
+**Why?** This avoids using the `Ctrl` key which can interfere with browser zoom when scrolling.
+
 ### Change Keyboard Shortcuts
 
 Edit `/usr/local/bin/magic_swipe.py` and modify these lines:
 
 ```python
-# Default: Ctrl+Super+Up/Down for vertical workspaces (Pop!_OS/GNOME)
-WORKSPACE_SWITCH_LEFT = ["xdotool", "key", "ctrl+super+Up"]
-WORKSPACE_SWITCH_RIGHT = ["xdotool", "key", "ctrl+super+Down"]
+# Default: Super+Up/Down for vertical workspaces (Pop!_OS/GNOME)
+# Note: Pop!_OS users should configure their system shortcuts to match (see above)
+WORKSPACE_SWITCH_LEFT = ["xdotool", "key", "super+Up"]
+WORKSPACE_SWITCH_RIGHT = ["xdotool", "key", "super+Down"]
 
-# Alternative: For horizontal workspaces
+# Alternative: For horizontal workspaces with Ctrl (may interfere with browser zoom)
 # WORKSPACE_SWITCH_LEFT = ["xdotool", "key", "ctrl+alt+Left"]
 # WORKSPACE_SWITCH_RIGHT = ["xdotool", "key", "ctrl+alt+Right"]
 ```
@@ -212,6 +223,16 @@ sudo python3 /usr/local/bin/magic_swipe.py
 ```
 
 If nothing appears, the Magic Mouse 2 driver may not be properly installed.
+
+### Browser zoom when scrolling
+
+If you experience unwanted browser zoom when scrolling:
+1. Make sure you've configured Pop!_OS shortcuts to use `Super+Up/Down` (not `Ctrl+Super`)
+2. Increase the debounce time in `/usr/local/bin/magic_swipe.py`:
+   ```python
+   DEBOUNCE_TIME = 0.7  # Increase from 0.5 if needed
+   ```
+3. Restart the service: `sudo systemctl restart magic-swipe.service`
 
 ## 🔄 Uninstall
 
